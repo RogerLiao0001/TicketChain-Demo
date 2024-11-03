@@ -1,0 +1,96 @@
+/* Filename - AuthForm.css */
+/* Form and Page Styling */
+
+/* 移除全局樣式，改為限制在 .AuthForm 內 */
+.AuthForm {
+    text-align: center;
+}
+
+.AuthForm h1 {
+    font-size: 32px; /* 更大的標題 */
+    text-align: center;
+    color: #8ecae6; /* 更淺的顏色 */
+}
+
+.AuthForm fieldset {
+    border: none;
+    background-color: #2b2d42; /* 深色背景 */
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.AuthForm form {
+    background-color: #2b2d42;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    transition: transform 0.2s;
+    width: 500px;
+    text-align: center;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.AuthForm input {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.AuthForm input[type="radio"],
+.AuthForm input[type="checkbox"] {
+    display: inline;
+    width: 10%;
+}
+
+.AuthForm select {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.AuthForm label {
+    font-size: 15px;
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 5px;
+    text-align: left;
+    color: #edf2f4; /* 接近白色的文字 */
+    font-weight: bold;
+}
+
+.AuthForm button {
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    background-color: #4caf50;
+    width: 40%;
+    font-size: 16px;
+}
+
+.AuthForm button:hover {
+    background-color: #45a049;
+}
+
+.AuthForm textarea {
+    resize: none;
+    width: 98%;
+    min-height: 100px;
+    max-height: 150px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    padding: 8px;
+}

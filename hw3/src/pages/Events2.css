@@ -1,0 +1,212 @@
+/* 限定 .app 容器的全局樣式 */
+.app {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+    background-color: #f5f7fa;
+    color: #333; /* 使用深灰色文字確保可讀性 */
+}
+
+/* 標題樣式 */
+.app h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #007bff; /* 藍色標題讓文字顯眼 */
+}
+
+/* 整體容器樣式 */
+.app .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 2rem;
+}
+
+/* 月曆容器樣式 */
+.app .calendar-container {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+/* 事件容器樣式 */
+.app .event-container {
+    flex: 1;
+    max-width: 500px;
+}
+
+/* 行動裝置樣式 */
+@media screen and (max-width: 768px) {
+    .app .container {
+        flex-direction: column;
+    }
+
+    .app .calendar-container,
+    .app .event-container {
+        max-width: 100%;
+        margin-right: 0;
+        margin-bottom: 2rem;
+    }
+}
+
+/* React Calendar 樣式 */
+.app .react-calendar {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.app .react-calendar__tile {
+    max-width: 100%;
+    padding: 10px 6.6667px;
+    background: #f0f0f0; /* 淺灰色背景 */
+    text-align: center;
+    line-height: 16px;
+    color: #333;
+}
+
+.app .react-calendar__tile--now {
+    background: #ffff76; /* 明亮黃色背景 */
+    color: #333;
+}
+
+.app .react-calendar__tile--active {
+    background: #007bff; /* 藍色背景 */
+    color: white;
+}
+
+/* 事件表單樣式 */
+.app .event-form {
+    margin-bottom: 20px;
+}
+
+.app .event-form h2 {
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.app .event-form p {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.app .event-form input {
+    padding: 8px;
+    font-size: 1rem;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.app .create-btn {
+    padding: 8px 16px;
+    background-color: #28a745; /* 綠色按鈕 */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.app .create-btn:hover {
+    background-color: #218838; /* 按鈕的深綠色hover效果 */
+}
+
+/* 事件列表樣式 */
+.app .event-list {
+    margin-top: 20px;
+}
+
+.app .event-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.app .event-card {
+    width: 300px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    margin: 10px;
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+}
+
+.app .event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.app .event-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.app .event-date {
+    font-size: 1rem;
+    color: #ff8c00; /* 橙色日期 */
+}
+
+.app .event-actions {
+    display: flex;
+}
+
+.app .update-btn,
+.app .delete-btn {
+    padding: 8px 12px;
+    margin-left: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.app .update-btn:hover {
+    background-color: #0056b3;
+}
+
+.app .delete-btn {
+    background-color: #dc3545; /* 紅色刪除按鈕 */
+}
+
+.app .delete-btn:hover {
+    background-color: #c82333;
+}
+
+.app .event-card-body {
+    padding-bottom: 10px;
+}
+
+.app .event-title {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+/* 特殊樣式 */
+.app .selected {
+    background-color: #007bff !important; /* 深藍色選擇樣式 */
+    color: white;
+}
+
+.app .event-marked {
+    background-color: #ff4081;
+    color: white;
+}

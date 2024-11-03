@@ -1,0 +1,28 @@
+/* src/components/Footer.css */
+.footer {
+    background-color: #1f1c2c;
+    padding: 20px;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .footer h4 {
+    margin-bottom: 10px;
+  }
+  
+  .footer button {
+    background-color: #4a90e2;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .footer button:hover {
+    background-color: #357ab8;
+  }

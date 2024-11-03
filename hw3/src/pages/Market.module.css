@@ -1,0 +1,249 @@
+/* Market.module.css */
+
+/* 整體背景區域設置，確保獨立顯示 */
+.market-container {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f8f9fa; /* 輕微灰白色背景 */
+    padding: 40px;
+    margin: 20px auto;
+    max-width: 1000px; /* 擴大寬度以支持橫向排列 */
+    border-radius: 10px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15); /* 添加陰影 */
+}
+
+/* Header 樣式 */
+.market-header {
+    background-color: #6cc24a;
+    padding: 20px;
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 搜索欄 */
+.search-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+}
+
+/* 商品展示區域 */
+.product-list {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto; /* 支持橫向滾動 */
+    gap: 20px;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.product {
+    background-color: #fff3e6;
+    border: 1px solid #6cc24a;
+    border-radius: 10px;
+    padding: 20px;
+    min-width: 200px;
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.product img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
+}
+
+.product img:hover {
+    transform: scale(1.1);
+}
+
+.product h2 {
+    font-size: 1.2rem;
+    color: #333;
+    margin: 10px 0;
+}
+
+.product p {
+    font-size: 1rem;
+    color: #555;
+    margin: 5px 0;
+}
+
+.add-to-cart-button {
+    background-color: #6cc24a;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-to-cart-button:hover {
+    background-color: #449e30;
+}
+
+/* 購物車區域 */
+.cart {
+    width: 100%;
+    max-width: 500px;
+    background-color: #fff9e6;
+    border: 1px solid #193d10;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    display: none; /* 預設隱藏，通過 active 類顯示 */
+}
+
+.cart.active {
+    display: block;
+}
+
+.cart h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.cart ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.cart-item .item-info {
+    display: flex;
+    align-items: center;
+}
+
+.cart-item .item-info img {
+    width: 60px; /* 固定大小 */
+    height: 60px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+.cart-item .item-details h3 {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.cart-item .item-details p {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.cart-item .item-actions {
+    display: flex;
+    align-items: center;
+}
+
+.cart-item .item-actions button {
+    background-color: #6cc24a;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 0 5px;
+    font-size: 1rem;
+}
+
+.cart-item .item-actions button:hover {
+    background-color: #449e30;
+}
+
+.cart .checkout-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.cart .total {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.cart .checkout-button {
+    background-color: #323754;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cart .checkout-button:hover {
+    background-color: #4c5cb6;
+}
+
+.empty-cart,
+.no-results {
+    text-align: center;
+    color: #777;
+    font-size: 1.2rem;
+    margin-top: 20px;
+}
+
+/* 手機響應式設計 */
+@media (max-width: 768px) {
+    .market-container {
+        padding: 20px;
+    }
+
+    .product-list {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .product {
+        width: 100%;
+    }
+
+    .cart {
+        width: 100%;
+    }
+}
