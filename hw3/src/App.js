@@ -18,15 +18,15 @@ function App() {
       <div className="app-container">
         <Navbar />
         <Routes>
-          <Route path="/" element={
+          <Route path="/hw3" element={
             <>
               <Hero />
               <Features />
             </>
           } />
-          <Route path="/auth" element={<AuthForm />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/market" element={<Market />} />
+          <Route path="/hw3/auth" element={<AuthForm />} />
+          <Route path="/hw3/events" element={<Events />} />
+          <Route path="/hw3/market" element={<Market />} />
         </Routes>
         <Footer />
       </div>
