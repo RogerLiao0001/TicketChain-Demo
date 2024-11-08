@@ -1,3 +1,68 @@
+// src/components/AuthForm.js
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+function AuthForm() {
+  const [isRegister, setIsRegister] = useState(true); // 用于切换注册和登录表单
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  // 切换注册和登录模式
+  const toggleForm = () => {
+    setIsRegister(!isRegister);
+  };
+
+  // 提交表单处理函数
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const endpoint = isRegister ? '/register' : '/login';
+    try {
+      const response = await axios.post(endpoint, { username, password });
+      // 假设后端返回一个token或用户信息
+      console.log('Success:', response.data);
+      // 登陆成功后导航到主页
+      navigate('/hw3');
+    } catch (error) {
+      console.error('Error:', error);
+      alert('操作失败，请重试');
+    }
+  };
+
+  return (
+    <div className="auth-form">
+      <h2>{isRegister ? '注册' : '登录'}</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>用户名：</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>密码：</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">{isRegister ? '注册' : '登录'}</button>
+      </form>
+      <button onClick={toggleForm}>
+        {isRegister ? '已有账号？点击登录' : '没有账号？点击注册'}
+      </button>
+    </div>
+  );
+}
+
+export default AuthForm;
+/*
 import React, { useState } from "react";
 import './AuthForm.css'; // 引入CSS文件
 
@@ -219,3 +284,4 @@ function AuthForm() {
 }
 
 export default AuthForm;
+*/
