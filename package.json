@@ -1,8 +1,16 @@
 {
-  "homepage": "https://rogerliao0001.github.io/hw3",
   "name": "ticket-master",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "start": "cd hw3 && npm start",
+    "build": "cd hw3 && npm run build",
+    "test": "cd hw3 && npm test",
+    "postinstall": "cd hw3 && npm install"
+  },
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
     "@heroicons/react": "^2.1.5",
@@ -28,36 +36,7 @@
     "tailwindcss": "^3.4.14",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
-    "start": "node server.js",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -b gh-pages-hw3 -d build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
     "gh-pages": "^6.2.0"
-  },
-  "engines": {
-    "node": ">=14.0.0"
   }
 }
