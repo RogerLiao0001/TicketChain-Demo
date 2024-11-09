@@ -4,23 +4,22 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function AuthForm() {
-  const [isRegister, setIsRegister] = useState(true); // 切換註冊和登入
+  const [isRegister, setIsRegister] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [dbStatus, setDbStatus] = useState(''); // 資料庫連線狀態
+  const [dbStatus, setDbStatus] = useState('');
   const navigate = useNavigate();
 
-  // 切換註冊和登入模式
   const toggleForm = () => {
     setIsRegister(!isRegister);
   };
 
-  // 測試資料庫連線的功能
+  // 測試資料庫連線
   useEffect(() => {
     const testDatabaseConnection = async () => {
       try {
         const response = await axios.get('/api/test-db');
-        setDbStatus(response.data.message); // 顯示資料庫連線狀態
+        setDbStatus(response.data.message);
       } catch (error) {
         setDbStatus('資料庫連線失敗');
         console.error('資料庫連線測試失敗:', error);
@@ -29,15 +28,14 @@ function AuthForm() {
     testDatabaseConnection();
   }, []);
 
-  // 表單提交處理函數
   const handleSubmit = async (e) => {
     e.preventDefault();
     const endpoint = isRegister ? '/api/register' : '/api/login';
     try {
       const response = await axios.post(endpoint, { username, password });
       if (response.data && response.data.success) {
-        console.log('成功:', response.data);
-        navigate('/hw3'); // 登入成功後導向
+        console.log('操作成功:', response.data);
+        navigate('/hw3');
       } else {
         console.error('操作失敗:', response.data.message);
         alert(response.data.message || '操作失敗，請重試');

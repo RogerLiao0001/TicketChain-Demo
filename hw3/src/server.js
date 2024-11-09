@@ -2,16 +2,16 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const path = require('path');
+const cors = require('cors');
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 // 中間件
+app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'hw3/build')));
 
-// 連接 MongoDB
+// 連接到 MongoDB
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('成功连接到数据库'))
   .catch((err) => console.error('数据库连接错误：', err));
@@ -21,11 +21,13 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true }
 });
+
 const User = mongoose.model('User', userSchema);
 
 // 測試資料庫連線
 app.get('/api/test-db', async (req, res) => {
   try {
+    // 使用 MongoDB ping 方法測試資料庫連線
     await mongoose.connection.db.admin().ping();
     res.json({ success: true, message: '資料庫連線成功' });
   } catch (error) {
@@ -41,7 +43,7 @@ app.post('/api/register', async (req, res) => {
     const existingUser = await User.findOne({ username });
     if (existingUser) return res.status(400).json({ success: false, message: '用戶已存在' });
 
-    const newUser = new User({ username, password });
+    const newUser = new User({ username, password }); // 這裡建議在真正應用中使用密碼加密
     await newUser.save();
     res.json({ success: true, message: '註冊成功' });
   } catch (error) {
@@ -66,11 +68,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// 任何未匹配的請求都返回靜態 React 應用
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'hw3/build', 'index.html'));
-});
-
+// 啟動伺服器
 app.listen(port, () => {
-  console.log(`伺服器運行於端口 ${port}`);
+  console.log(`伺服器正在端口 ${port} 運行`);
 });
