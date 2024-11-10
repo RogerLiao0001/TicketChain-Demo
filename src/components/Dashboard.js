@@ -51,11 +51,11 @@ function Dashboard() {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      if (response.data.success) {
-        setUserData(response.data.user);
-        setUserTickets(response.data.user.tickets || []); // 假設 API 返回用戶的票券
+      if (responseUserData.data.success) {
+        setUserData(responseUserData.data.user);
+        setUserTickets(responseUserData.data.user.tickets || []);
       } else {
-        throw new Error(response.data.message);
+        throw new Error(responseUserData.data.message);
       }
       setLoading(false);
     } catch (error) {
