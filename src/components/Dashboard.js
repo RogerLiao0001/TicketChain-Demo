@@ -1,4 +1,3 @@
-// src/components/Dashboard.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -8,8 +7,8 @@ function Dashboard() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState('tickets'); // 新增：標籤頁狀態
-  const [userTickets, setUserTickets] = useState([]); // 新增：用戶已購買的票券
+  const [activeTab, setActiveTab] = useState('tickets');
+  const [userTickets, setUserTickets] = useState([]);
   const [tickets, setTickets] = useState([
     { 
       id: 1, 
@@ -53,17 +52,29 @@ function Dashboard() {
 
       if (responseUserData.data.success) {
         setUserData(responseUserData.data.user);
-        setUserTickets(responseUserData.data.user.tickets || []);
+        // 确保tickets数组存在
+        const userTicketsData = responseUserData.data.user.tickets || [];
+        // 将购买的票券与票券详情合并
+        const ticketsWithDetails = userTicketsData.map(userTicket => {
+          const ticketDetails = tickets.find(t => t.id === userTicket.ticketId) || {};
+          return {
+            ...ticketDetails,
+            ...userTicket,
+            purchaseDate: new Date(userTicket.purchaseDate).toLocaleDateString()
+          };
+        });
+        setUserTickets(ticketsWithDetails);
       } else {
         throw new Error(responseUserData.data.message);
       }
-      setLoading(false);
     } catch (error) {
+      console.error('获取用户数据错误:', error);
       setError(error.message || '無法獲取用戶數據');
-      setLoading(false);
       if (error.message === '未登入') {
         navigate('/hw3/auth');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -92,13 +103,15 @@ function Dashboard() {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      if (response.data.success) {
+      if (responsePurchase.data.success) {
         alert(`購買 ${ticket.name} 成功！`);
-        fetchUserData(); // 刷新用戶數據
+        await fetchUserData(); // 等待数据刷新完成
+        setActiveTab('purchased'); // 自动切换到已购买票券页面
       } else {
-        throw new Error(response.data.message);
+        throw new Error(responsePurchase.data.message);
       }
     } catch (error) {
+      console.error('购买错误:', error);
       alert(error.message || '購買失敗');
     }
   };
