@@ -17,7 +17,7 @@ function AuthForm({ setIsAuthenticated }) {
     
     try {
       const endpoint = isRegister ? 'register' : 'login';
-      const response = await axios.post(`http://localhost:5000/api/${endpoint}`, {
+      const response = await axios.post(`/api/${endpoint}`, {
         username,
         password
       });

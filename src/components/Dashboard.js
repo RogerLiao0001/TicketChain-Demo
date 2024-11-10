@@ -47,7 +47,7 @@ function Dashboard() {
         throw new Error('未登入');
       }
 
-      const response = await axios.get('http://localhost:5000/api/user-data', {
+      const responseUserData = await axios.get('/api/user-data', {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -85,7 +85,7 @@ function Dashboard() {
         throw new Error('點數不足');
       }
 
-      const response = await axios.post('http://localhost:5000/api/purchase', {
+      const responsePurchase = await axios.post('/api/purchase', {
         ticketId,
         price: ticket.price
       }, {

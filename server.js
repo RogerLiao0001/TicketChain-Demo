@@ -11,7 +11,9 @@ const cors = require('cors');
 const path = require('path'); // 添加這行
 
 const app = express();
-const port = process.env.PORT || 5000;
+
+const PORT = process.env.PORT || 5000;
+
 
 // 中間件設置
 app.use(cors());
@@ -232,7 +234,6 @@ app.use((err, req, res, next) => {
 });
 
 // 啟動服務器
-app.listen(port, () => {
-  console.log(`伺服器運行於端口 ${port}`);
-  console.log('API 測試地址: http://localhost:5000/api/test-db');
+app.listen(PORT, () => {
+  console.log(`伺服器運行於端口 ${PORT}`);
 });
