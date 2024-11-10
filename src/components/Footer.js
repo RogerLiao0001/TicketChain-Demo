@@ -2,9 +2,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
-import AuthForm from './AuthForm';
 
-function Footer() {
+function Footer({ isAuthenticated }) {
   return (
     <footer className="footer">
       <div>
@@ -19,9 +18,16 @@ function Footer() {
       <div>
         <h4 className="text-lg font-semibold mb-4">用戶中心</h4>
         <ul className="space-y-2">
-          <li><Link to="/hw3/auth"><button>註冊/登入</button></Link></li>
-          <li><Link to="/hw3/dashboard"><button>儀表板</button></Link></li>
-          <li><Link to="/hw3/wallet"><button>我的錢包</button></Link></li>
+          {isAuthenticated ? (
+            // 已登入狀態
+            <>
+              <li><Link to="/hw3/dashboard"><button>用戶中心</button></Link></li>
+              <li><Link to="/hw3/wallet"><button>我的錢包</button></Link></li>
+            </>
+          ) : (
+            // 未登入狀態
+            <li><Link to="/hw3/auth"><button>註冊/登入</button></Link></li>
+          )}
         </ul>
       </div>
       
