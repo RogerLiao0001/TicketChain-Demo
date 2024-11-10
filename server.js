@@ -28,10 +28,19 @@ app.use(express.static(buildPath));
 
 
 
+// 在 server.js 中，修改 userSchema
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  points: { type: Number, default: 1000 }
+  points: { type: Number, default: 1000 },
+  purchasedTickets: [{
+    ticketId: Number,
+    name: String,
+    date: String,
+    location: String,
+    description: String,
+    purchaseDate: { type: Date, default: Date.now }
+  }]
 });
 
 // 連接到 MongoDB
@@ -159,15 +168,26 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// 購票路由
+// 在 server.js 中，修改购票路由
 app.post('/api/purchase', authenticateUser, async (req, res) => {
-  const { price } = req.body;
+  const { ticketId, price, ticketDetails } = req.body;
   
   try {
     if (req.user.points < price) {
-      return res.status(400).json({ message: '點數不足' });
+      return res.status(400).json({ success: false, message: '點數不足' });
     }
 
+    // 添加购票记录
+    req.user.purchasedTickets.push({
+      ticketId,
+      name: ticketDetails.name,
+      date: ticketDetails.date,
+      location: ticketDetails.location,
+      description: ticketDetails.description,
+      purchaseDate: new Date()
+    });
+
+    // 扣除点数
     req.user.points -= price;
     await req.user.save();
 
@@ -177,11 +197,12 @@ app.post('/api/purchase', authenticateUser, async (req, res) => {
       newPoints: req.user.points
     });
   } catch (error) {
-    res.status(500).json({ message: '購買失敗' });
+    console.error('購票錯誤：', error);
+    res.status(500).json({ success: false, message: '購買失敗' });
   }
 });
 
-// 獲取用戶數據路由
+// 修改获取用户数据路由
 app.get('/api/user-data', async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
@@ -206,7 +227,8 @@ app.get('/api/user-data', async (req, res) => {
       success: true,
       user: {
         username: user.username,
-        points: user.points
+        points: user.points,
+        purchasedTickets: user.purchasedTickets // 添加这行，返回购票记录
       }
     });
   } catch (error) {

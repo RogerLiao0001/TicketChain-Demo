@@ -39,30 +39,41 @@ function Dashboard() {
   const navigate = useNavigate();
 
   // 獲取用戶數據
-  const fetchUserData = async () => {
+ // Dashboard.js 中的 fetchUserData 函数修改如下：
+
+const fetchUserData = async () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         throw new Error('未登入');
       }
-
+  
       const responseUserData = await axios.get('/api/user-data', {
         headers: { Authorization: `Bearer ${token}` }
       });
-
+  
+      console.log('用户数据响应:', responseUserData.data); // 添加此行来查看返回的数据结构
+  
       if (responseUserData.data.success) {
         setUserData(responseUserData.data.user);
-        // 确保tickets数组存在
-        const userTicketsData = responseUserData.data.user.tickets || [];
+        
+        // 确保从后端获取的票券数据正确
+        const purchasedTickets = responseUserData.data.user.purchasedTickets || [];
+        console.log('已购买的票券:', purchasedTickets); // 添加此行来检查票券数据
+  
         // 将购买的票券与票券详情合并
-        const ticketsWithDetails = userTicketsData.map(userTicket => {
-          const ticketDetails = tickets.find(t => t.id === userTicket.ticketId) || {};
+        const ticketsWithDetails = purchasedTickets.map(purchasedTicket => {
+          const ticketDetails = tickets.find(t => t.id === purchasedTicket.ticketId);
+          if (!ticketDetails) return null;
+  
           return {
             ...ticketDetails,
-            ...userTicket,
-            purchaseDate: new Date(userTicket.purchaseDate).toLocaleDateString()
+            purchaseDate: new Date(purchasedTicket.purchaseDate).toLocaleDateString('zh-TW'),
+            id: purchasedTicket.ticketId, // 确保 ID 正确设置
           };
-        });
+        }).filter(ticket => ticket !== null); // 过滤掉无效的票券
+  
+        console.log('处理后的票券数据:', ticketsWithDetails); // 添加此行来验证处理后的数据
         setUserTickets(ticketsWithDetails);
       } else {
         throw new Error(responseUserData.data.message);
@@ -82,7 +93,6 @@ function Dashboard() {
     fetchUserData();
   }, [navigate]);
 
-  // 購票功能
   const handlePurchase = async (ticketId) => {
     try {
       const token = localStorage.getItem('token');
@@ -91,22 +101,23 @@ function Dashboard() {
       if (!ticket) {
         throw new Error('票券不存在');
       }
-
+  
       if (userData.points < ticket.price) {
         throw new Error('點數不足');
       }
-
+  
       const responsePurchase = await axios.post('/api/purchase', {
         ticketId,
-        price: ticket.price
+        price: ticket.price,
+        ticketDetails: ticket // 发送完整的票券信息到后端
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-
+  
       if (responsePurchase.data.success) {
         alert(`購買 ${ticket.name} 成功！`);
-        await fetchUserData(); // 等待数据刷新完成
-        setActiveTab('purchased'); // 自动切换到已购买票券页面
+        await fetchUserData(); // 刷新用户数据
+        setActiveTab('purchased'); // 切换到已购买票券页面
       } else {
         throw new Error(responsePurchase.data.message);
       }
@@ -177,16 +188,18 @@ function Dashboard() {
         </div>
       ) : (
         <div className="purchased-tickets">
-          {userTickets.length > 0 ? (
+          {userData?.purchasedTickets && userData.purchasedTickets.length > 0 ? (
             <div className="tickets-grid">
-              {userTickets.map(ticket => (
-                <div key={ticket.id} className="ticket-card purchased">
+              {userData.purchasedTickets.map((ticket, index) => (
+                <div key={index} className="ticket-card purchased">
                   <div className="ticket-info">
                     <h4>{ticket.name}</h4>
                     <p className="ticket-date">日期: {ticket.date}</p>
                     <p className="ticket-location">地點: {ticket.location}</p>
                     <p className="ticket-description">{ticket.description}</p>
-                    <p className="purchase-date">購買日期: {ticket.purchaseDate}</p>
+                    <p className="purchase-date">
+                      購買日期: {new Date(ticket.purchaseDate).toLocaleDateString('zh-TW')}
+                    </p>
                   </div>
                 </div>
               ))}
