@@ -83,7 +83,7 @@
 - 完全使用區塊鏈的售票系統，國內外有相關文獻做過研究了，但我覺得沒有套用的必要性，且對於搶票問題無根本性解決！
 - 本大綱為初稿，我會閱讀更多文獻來將此系統架構完善，並且做成完整的網站！
 
-# Getting Started with Create React App
+# 執行方式(Getting Started with Create React App)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
