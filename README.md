@@ -3,7 +3,7 @@
 ## 連結
 - [概念介紹簡報](https://www.canva.com/design/DAGWK0eREuo/e2G5NRa9IXbpLWZR8265yA/view?utm_content=DAGWK0eREuo&utm_campaign=designshare&utm_medium=link&utm_source=editor)
 - [目前之演示網頁](https://blockchain-ticket-cb046d6a501b.herokuapp.com/hw3)
-- [介紹網站(隨時更新)]([https://github.com/RogerLiao0001/TicketChain-Demo](https://hackmd.io/T_M2_dVdQ8W8M6QOZgRALw?view))
+- [介紹網站(隨時更新)](https://hackmd.io/T_M2_dVdQ8W8M6QOZgRALw?view)
 
 ## 緣由
 最近周杰倫演唱會、獵人限量卡包事件可得知，現有售票系統、限量商品購買中存在票務分配不公、黃牛操控等問題：
