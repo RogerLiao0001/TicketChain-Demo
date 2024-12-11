@@ -43,35 +43,5 @@ router.post('/register', async (req, res) => {
 });
 
 
-// 儲存用戶的錢包地址
-router.post('/save-wallet-address', async (req, res) => {
-    try {
-      const token = req.headers.authorization?.split(' ')[1];
-      if (!token) {
-        return res.status(401).json({ success: false, message: '未提供認證token' });
-      }
-  
-      const { walletAddress } = req.body;
-      if (!walletAddress) {
-        return res.status(400).json({ success: false, message: '錢包地址為必填項' });
-      }
-  
-      const user = await User.findOneAndUpdate(
-        { username: token },
-        { walletAddress },
-        { new: true }
-      );
-  
-      if (!user) {
-        return res.status(404).json({ success: false, message: '用戶不存在' });
-      }
-  
-      res.json({ success: true, message: '錢包地址已儲存', walletAddress: user.walletAddress });
-    } catch (error) {
-      console.error('保存錢包地址錯誤:', error);
-      res.status(500).json({ success: false, message: '伺服器錯誤' });
-    }
-  });
-  
 
 module.exports = router;

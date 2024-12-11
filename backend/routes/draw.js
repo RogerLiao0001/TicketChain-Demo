@@ -45,34 +45,5 @@ router.get('/userResult', async (req, res) => {
 
 
 
-// 獲取用戶中選的活動列表
-router.get('/user-won-events', async (req, res) => {
-  try {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) {
-      return res.status(401).json({ success: false, message: '未提供認證token' });
-    }
-
-    const user = await User.findOne({ username: token });
-    if (!user) {
-      return res.status(404).json({ success: false, message: '用戶不存在' });
-    }
-
-    const events = await Event.find({ winners: user.username });
-    const wonEvents = events.map(event => ({
-      eventId: event.eventId,
-      eventName: event.eventName,
-    }));
-
-    res.json({ success: true, wonEvents });
-  } catch (error) {
-    console.error('取得用戶中選活動錯誤:', error);
-    res.status(500).json({ success: false, message: '伺服器錯誤' });
-  }
-});
-
-module.exports = router;
-
-
 
 module.exports = router;

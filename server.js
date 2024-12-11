@@ -19,13 +19,16 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+
+
 // 設置靜態文件路徑
 const buildPath = path.join(__dirname, 'build');
 console.log('Current directory:', __dirname);
 console.log('Build path:', buildPath);
 app.use(express.static(buildPath));
 
-// 保留原本的 User schema 與購票記錄機制
+// server.js (片段)
+
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -43,8 +46,11 @@ const userSchema = new mongoose.Schema({
     eventName: String,
     stakedPoints: Number,
     lastUpdate: { type: Date, default: Date.now }
-  }]
+  }],
+  walletAddress: { type: String, default: '' } // 新增錢包地址欄位
 });
+
+//const User = mongoose.model('User', userSchema);
 
 
 // 連接到 MongoDB
@@ -670,6 +676,47 @@ app.get('/api/getEventStakeInfo', async (req, res) => {
   } catch (error) {
     console.error('取得Event投注狀態錯誤:', error);
     res.status(500).json({ success: false, message: '取得投注狀態失敗' });
+  }
+});
+
+// server.js (片段)
+// 假設已有 authenticateUser 中介層
+
+app.get('/api/user-won-events', authenticateUser, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    // 找出包含此 user 且 status='won' 的 event
+    const events = await Event.find({ "participants.user": userId, "participants.status": "won" });
+
+    if (!events || events.length === 0) {
+      return res.json({ success: true, wonEvents: [] });
+    }
+
+    const wonEvents = events.map(e => ({
+      eventId: e.eventId,
+      eventName: e.eventName
+    }));
+
+    res.json({ success: true, wonEvents });
+  } catch (error) {
+    console.error('取得用戶中選活動錯誤:', error);
+    res.status(500).json({ success: false, message: '取得用戶中選活動失敗' });
+  }
+});
+
+// server.js (片段)
+
+app.post('/api/save-wallet-address', authenticateUser, async (req, res) => {
+  const { walletAddress } = req.body;
+  if (!walletAddress) return res.status(400).json({ success: false, message: '請輸入錢包地址' });
+
+  try {
+    req.user.walletAddress = walletAddress;
+    await req.user.save();
+    res.json({ success: true, message: '錢包地址已保存' });
+  } catch (error) {
+    console.error('保存錢包地址錯誤:', error);
+    res.status(500).json({ success: false, message: '保存失敗' });
   }
 });
 
