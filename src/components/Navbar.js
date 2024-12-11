@@ -21,6 +21,7 @@ function Navbar({ isAuthenticated, setIsAuthenticated }) {
           <>
             <Link to="/hw3/dashboard"><button>用戶中心</button></Link>
             <Link to="/hw3/events"><button>活動列表</button></Link>
+            <Link to="/hw3/coinstake"><button>購票投注</button></Link>
             <Link to="/hw3/market"><button>NFT市場</button></Link>
             <Link to="/hw3"><button>首頁</button></Link>
             <button onClick={handleLogout}>登出</button>
@@ -30,6 +31,7 @@ function Navbar({ isAuthenticated, setIsAuthenticated }) {
           <>
             <Link to="/hw3/auth"><button>登入/註冊</button></Link>
             <Link to="/hw3/events"><button>活動列表</button></Link>
+            <Link to="/hw3/coinstake"><button>購票投注</button></Link>
             <Link to="/hw3/market"><button>NFT市場</button></Link>
             <Link to="/hw3"><button>首頁</button></Link>
           </>

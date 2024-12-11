@@ -1,4 +1,5 @@
 // src/App.js
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -11,26 +12,26 @@ import Events from './pages/Events';
 import Market from './pages/Market';
 import Dashboard from './components/Dashboard';
 
+// 新增引入 AdminDashboard
+import AdminDashboard from './AdminDashboard';
+import CoinStake from './components/CoinStake';
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // 檢查用戶是否已登入
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
   }, []);
 
-  // 受保護的路由組件
   const ProtectedRoute = ({ children }) => {
     return isAuthenticated ? children : <Navigate to="/hw3/auth" />;
   };
 
-  // 公開路由組件（已登入時重定向到 Dashboard）
   const PublicRoute = ({ children }) => {
     return !isAuthenticated ? children : <Navigate to="/hw3/dashboard" />;
   };
 
-  // 創建共享的 props
   const authProps = {
     isAuthenticated,
     setIsAuthenticated
@@ -78,6 +79,21 @@ function App() {
               <Market {...authProps} />
             </ProtectedRoute>
           } />
+
+          {/* AdminDashboard 路由 (不顯示在Navbar) */}
+          <Route path="/hw3/admin" element={
+            <PublicRoute>
+              <AdminDashboard {...authProps} />
+            </PublicRoute>
+          } />
+
+          {/* CoinStake 路由 */}
+          <Route path="/hw3/coinstake" element={
+            <ProtectedRoute>
+              <CoinStake {...authProps} />
+            </ProtectedRoute>
+          } />
+
         </Routes>
         <Footer {...authProps} />
       </div>
