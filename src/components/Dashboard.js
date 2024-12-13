@@ -18,11 +18,11 @@ function Dashboard() {
       if (!token) {
         throw new Error('未登入');
       }
-  
+
       const responseUserData = await axios.get('/api/user-data', {
         headers: { Authorization: `Bearer ${token}` }
       });
-  
+
       if (responseUserData.data.success) {
         setUserData(responseUserData.data.user);
         setWalletAddr(responseUserData.data.user.walletAddress || '');
@@ -107,15 +107,15 @@ function Dashboard() {
       </div>
 
       <div className="won-events">
-        <h3>用戶已獲得票券</h3>
+        <h3>已抽選票券狀態</h3>
         {wonEvents.length > 0 ? (
           <ul>
             {wonEvents.map((ev, i) => (
-              <li key={i}>{`活動編號: ${ev.eventId}, 活動名稱: ${ev.eventName}`}</li>
+              <li key={i}>{`活動編號: ${ev.eventId}, 活動名稱: ${ev.eventName}, 總開放人數: ${ev.seatsCount}, 抽選順位: ${ev.orderNumber}, 是否獲得票券: ${ev.gotTicket ? '是' : '否'}`}</li>
             ))}
           </ul>
         ) : (
-          <p>無已獲得票券</p>
+          <p>無已抽選票券</p>
         )}
       </div>
 

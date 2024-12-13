@@ -126,28 +126,31 @@ function CoinStake({ isAuthenticated }) {
   const handleCheckDrawResult = async (eventInfo) => {
     const { eventId } = eventInfo;
     try {
-      const token = localStorage.getItem('token');
-      const res = await axios.get(`/api/getUserDrawResult?eventId=${eventId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (res.data.success) {
-        const dr = res.data.drawResult;
-        if (!dr || dr.orderNumber == null) {
-          alert(res.data.message || '抽選尚未完成或您未參與');
-          setDrawResults(prev => ({ ...prev, [eventId]: null }));
+        const token = localStorage.getItem('token');
+        const res = await axios.get(`/api/getUserDrawResult?eventId=${eventId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.data.success) {
+            const dr = res.data.drawResult;
+            if (!dr || dr.orderNumber == null) {
+                alert(res.data.message || '抽選尚未完成或您未參與');
+                setDrawResults(prev => ({ ...prev, [eventId]: null }));
+            } else {
+                // 判斷是否中獎
+                const gotTicket = dr.orderNumber <= dr.seatsCount;
+                const message = `總開放人數: ${dr.seatsCount} 抽選順位: ${dr.orderNumber} 是否獲得票券: ${gotTicket ? '是' : '否'}`;
+                setDrawResults(prev => ({ ...prev, [eventId]: { ...dr, gotTicket, message } }));
+                alert('已取得抽選結果');
+            }
         } else {
-          const message = `總開放人數: ${dr.seatsCount} 抽選順位: ${dr.orderNumber} 是否獲得票券: ${dr.gotTicket ? '是' : '否'}`;
-          setDrawResults(prev => ({ ...prev, [eventId]: { ...dr, message } }));
-          alert('已取得抽選結果');
+            alert(res.data.message || '取得抽選結果失敗');
         }
-      } else {
-        alert(res.data.message || '取得抽選結果失敗');
-      }
     } catch (err) {
-      console.error(err);
-      alert('取得抽選結果失敗:' + (err.message || ''));
+        console.error(err);
+        alert('取得抽選結果失敗:' + (err.message || ''));
     }
-  };
+};
+
 
   // 查看目前投注狀態
   const handleCheckStakeInfo = async (eventInfo) => {

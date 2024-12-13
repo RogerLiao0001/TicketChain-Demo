@@ -282,38 +282,42 @@ app.post('/api/saveDrawResult', async (req, res) => {
     }
 
     const { addresses, points, orders } = result;
-    const seatsCount = eventDoc.seatsCount;
-
     const crypto = require('crypto');
-    const winners = [];
+    const allParticipants = [];
 
     for (let i = 0; i < addresses.length; i++) {
       const addr = addresses[i].toLowerCase();
-      const order = orders[i]; // 抽選順序
+      const order = orders[i];
       const participant = eventDoc.participants.find(p => {
         const hash = crypto.createHash('sha256').update(p.user.username).digest('hex');
-        const fakeAddr = '0x' + hash.slice(0,40);
+        const fakeAddr = '0x' + hash.slice(0, 40);
         return fakeAddr.toLowerCase() === addr;
       });
 
       if (participant) {
-        participant.orderNumber = order; // 在此設定抽選順序給 participant
-        if (order <= seatsCount) {
-          participant.status = 'won';
-          winners.push(participant.user.username);
-        } else {
-          participant.status = 'lost';
-        }
+        participant.orderNumber = order; // 設定排序
+        allParticipants.push({
+          username: participant.user.username,
+          orderNumber: order,
+        });
       }
     }
 
+    // 將所有參與者按 orderNumber 排序並保存到 winners
+    allParticipants.sort((a, b) => a.orderNumber - b.orderNumber);
+    eventDoc.winners = allParticipants.map(p => p.username); // 只存 username
+
     await eventDoc.save();
-    res.json({ success: true, winners });
+
+    res.json({ success: true, winners: eventDoc.winners });
   } catch (error) {
     console.error('儲存抽選結果錯誤:', error);
     res.status(500).json({ success: false, message: '儲存失敗' });
   }
 });
+
+
+
 
 
 app.get('/api/getDrawWinners', async (req, res) => {
@@ -576,6 +580,7 @@ app.post('/api/syncParticipantsFromStakes', async (req, res) => {
 
 // server.js 中
 // server.js 中的 /api/getUserDrawResult
+// server.js 中的 /api/getUserDrawResult
 app.get('/api/getUserDrawResult', authenticateUser, async (req, res) => {
   const { eventId } = req.query;
   if (!eventId) return res.status(400).json({ success: false, message: '缺少 eventId' });
@@ -636,6 +641,7 @@ app.get('/api/getUserDrawResult', authenticateUser, async (req, res) => {
 });
 
 
+
 // server.js 新增 /api/getEventStakeInfo
 app.get('/api/getEventStakeInfo', async (req, res) => {
   const { eventId } = req.query;
@@ -682,27 +688,44 @@ app.get('/api/getEventStakeInfo', async (req, res) => {
 // server.js (片段)
 // 假設已有 authenticateUser 中介層
 
-app.get('/api/user-won-events', authenticateUser, async (req, res) => {
+app.get('/api/user-won-events', async (req, res) => {
   try {
-    const userId = req.user._id;
-    // 找出包含此 user 且 status='won' 的 event
-    const events = await Event.find({ "participants.user": userId, "participants.status": "won" });
-
-    if (!events || events.length === 0) {
-      return res.json({ success: true, wonEvents: [] });
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ success: false, message: '未提供授權 token' });
     }
 
-    const wonEvents = events.map(e => ({
-      eventId: e.eventId,
-      eventName: e.eventName
-    }));
+    const user = await User.findOne({ username: token });
+    if (!user) {
+      return res.status(404).json({ success: false, message: '用戶不存在' });
+    }
+
+    const events = await Event.find({}).lean(); // 取得所有活動
+    const wonEvents = [];
+
+    events.forEach(event => {
+      const participantIndex = event.winners.indexOf(user.username); // 找出用戶的排名
+      if (participantIndex !== -1) {
+        const orderNumber = participantIndex + 1; // 排名從 1 開始
+        const gotTicket = orderNumber <= event.seatsCount; // 判斷是否中選
+        wonEvents.push({
+          eventId: event.eventId,
+          eventName: event.eventName,
+          seatsCount: event.seatsCount,
+          orderNumber,
+          gotTicket,
+        });
+      }
+    });
 
     res.json({ success: true, wonEvents });
   } catch (error) {
     console.error('取得用戶中選活動錯誤:', error);
-    res.status(500).json({ success: false, message: '取得用戶中選活動失敗' });
+    res.status(500).json({ success: false, message: '無法取得中選活動' });
   }
 });
+
+
 
 // server.js (片段)
 
